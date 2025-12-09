@@ -1,0 +1,100 @@
+<!-- Menu Page -->
+<section class="menu-page">
+  <div class="container-custom">
+    <!-- Header -->
+    <div class="page-header">
+      <h1>Nuestro Menú</h1>
+      <p>Descubre nuestra selección de platos cuidadosamente elaborados</p>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="filters-section">
+      <div class="category-filters">
+        <button 
+          type="button"
+          (click)="filterByCategory(null)" 
+          [class.active]="selectedCategory === null"
+          class="filter-btn">
+          Todos
+        </button>
+        <button 
+          type="button"
+          (click)="filterByCategory(ProductCategory.APPETIZER)" 
+          [class.active]="selectedCategory === ProductCategory.APPETIZER"
+          class="filter-btn">
+          Entradas
+        </button>
+        <button 
+          type="button"
+          (click)="filterByCategory(ProductCategory.MAIN_COURSE)" 
+          [class.active]="selectedCategory === ProductCategory.MAIN_COURSE"
+          class="filter-btn">
+          Platos Principales
+        </button>
+        <button 
+          type="button"
+          (click)="filterByCategory(ProductCategory.SALAD)" 
+          [class.active]="selectedCategory === ProductCategory.SALAD"
+          class="filter-btn">
+          Ensaladas
+        </button>
+        <button 
+          type="button"
+          (click)="filterByCategory(ProductCategory.DESSERT)" 
+          [class.active]="selectedCategory === ProductCategory.DESSERT"
+          class="filter-btn">
+          Postres
+        </button>
+        <button 
+          type="button"
+          (click)="filterByCategory(ProductCategory.BEVERAGE)" 
+          [class.active]="selectedCategory === ProductCategory.BEVERAGE"
+          class="filter-btn">
+          Bebidas
+        </button>
+      </div>
+
+      <div class="sort-filter">
+        <label for="sort">Ordenar por:</label>
+        <select id="sort" (change)="onSortChange($any($event.target).value)" [value]="selectedSort">
+          <option value="name">Nombre (A-Z)</option>
+          <option value="price-asc">Precio (Menor a Mayor)</option>
+          <option value="price-desc">Precio (Mayor a Menor)</option>
+          <option value="rating">Mejor Valorados</option>
+        </select>
+      </div>
+
+      @if (selectedCategory !== null) {
+        <button type="button" (click)="clearFilters()" class="clear-filters">
+          Limpiar filtros
+        </button>
+      }
+    </div>
+
+    <!-- Loading -->
+    @if (isLoading) {
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+      </div>
+    }
+
+    <!-- Products Grid -->
+    @if (!isLoading && filteredProducts.length > 0) {
+      <div class="products-grid">
+        @for (product of filteredProducts; track product.id) {
+          <app-product-card 
+            [product]="product" 
+            (addToCart)="addToCart($event)">
+          </app-product-card>
+        }
+      </div>
+    }
+
+    <!-- Empty State -->
+    @if (!isLoading && filteredProducts.length === 0) {
+      <div class="empty-state">
+        <p>No se encontraron productos en esta categoría.</p>
+      </div>
+    }
+  </div>
+</section>

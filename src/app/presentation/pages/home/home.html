@@ -1,0 +1,113 @@
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container-custom">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>
+          Experiencia Culinaria 
+          <span class="highlight">Excepcional</span>
+        </h1>
+        <p>
+          Descubre sabores únicos preparados por nuestros chefs con ingredientes premium y pasión por la gastronomía.
+        </p>
+        <div class="hero-buttons">
+          <button type="button" (click)="navigateToMenu()" class="btn-primary">
+            Explorar Menú
+          </button>
+          <button type="button" (click)="navigateToAbout()" class="btn-outline">
+            Conocer Más
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Decorative Elements -->
+  <div class="decorative-blob blob-1"></div>
+  <div class="decorative-blob blob-2"></div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="featured-section">
+  <div class="container-custom">
+    <!-- Section Header -->
+    <div class="section-header">
+      <h2>Platos Destacados</h2>
+      <p>
+        Selección de nuestras especialidades más populares y mejor valoradas
+      </p>
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading) {
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+      </div>
+    }
+
+    <!-- Products Grid -->
+    @if (!isLoading && featuredProducts.length > 0) {
+      <div class="products-grid">
+        @for (product of featuredProducts; track product.id) {
+          <app-product-card 
+            [product]="product" 
+            (addToCart)="addToCart($event)">
+          </app-product-card>
+        }
+      </div>
+
+      <!-- View All Button -->
+      <div class="view-all-button">
+        <a routerLink="/menu" class="btn-secondary">
+          Ver Todo el Menú
+        </a>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+  <div class="container-custom">
+    <div class="features-grid">
+      <!-- Feature 1 -->
+      <div class="feature-card">
+        <div class="feature-icon primary">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3>Entrega Rápida</h3>
+        <p>
+          Recibe tu pedido en menos de 30 minutos, fresco y caliente
+        </p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="feature-card">
+        <div class="feature-icon accent">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3>Ingredientes Premium</h3>
+        <p>
+          Solo usamos ingredientes frescos y de la más alta calidad
+        </p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="feature-card">
+        <div class="feature-icon primary">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+          </svg>
+        </div>
+        <h3>Excelencia Garantizada</h3>
+        <p>
+          4.8 estrellas promedio basado en miles de reseñas
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

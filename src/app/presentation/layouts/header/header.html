@@ -1,0 +1,122 @@
+<header>
+  <nav class="container-custom">
+    <div class="nav-container">
+      <!-- Logo -->
+      <div class="logo-section">
+        <a routerLink="/">
+          <div class="logo-icon">
+            <span>R</span>
+          </div>
+          <div class="logo-text hidden md-block">
+            <h1>Restaurant</h1>
+            <p>Gourmet Experience</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="desktop-nav">
+        <a routerLink="/menu" routerLinkActive="active">Menú</a>
+        <a routerLink="/nosotros" routerLinkActive="active">Nosotros</a>
+        <a routerLink="/contacto" routerLinkActive="active">Contacto</a>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <!-- Search Icon -->
+        <button (click)="toggleSearch()" aria-label="Buscar" class="search-toggle">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </button>
+
+        <!-- User Menu -->
+        @if (authState.isAuthenticated()) {
+          <a routerLink="/profile" class="user-menu">
+            <div class="avatar">
+              <span>{{ authState.user()?.firstName?.charAt(0) || 'U' }}</span>
+            </div>
+            <span class="user-name">{{ authState.user()?.firstName || 'Usuario' }}</span>
+          </a>
+        } @else {
+          <a routerLink="/auth/login" class="login-link">Ingresar</a>
+        }
+
+        <!-- Wishlist -->
+        <a routerLink="/wishlist" class="wishlist-link">
+          <svg fill="currentColor" viewBox="0 0 24 24">
+            <path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z" />
+          </svg>
+          @if (wishlistState.itemCount() > 0) {
+            <span class="wishlist-badge">{{ wishlistState.itemCount() }}</span>
+          }
+        </a>
+
+        <!-- Cart -->
+        <a routerLink="/cart">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          @if (cartState.itemCount() > 0) {
+            <span class="cart-badge">{{ cartState.itemCount() }}</span>
+          }
+        </a>
+
+        <!-- Mobile Menu Button -->
+        <button (click)="toggleMenu()" class="mobile-menu-btn" aria-label="Menú">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            @if (!isMenuOpen) {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            } @else {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            }
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    @if (isMenuOpen) {
+      <div class="mobile-menu">
+        <div class="menu-links">
+          <a routerLink="/menu" (click)="closeMenu()">Menú</a>
+          <a routerLink="/nosotros" (click)="closeMenu()">Nosotros</a>
+          <a routerLink="/contacto" (click)="closeMenu()">Contacto</a>
+          
+          @if (authState.isAuthenticated()) {
+            <a routerLink="/profile" (click)="closeMenu()">Mi Perfil</a>
+          } @else {
+            <a routerLink="/auth/login" (click)="closeMenu()" class="btn-primary">Ingresar</a>
+          }
+        </div>
+      </div>
+    }
+  </nav>
+
+  <!-- Search Overlay -->
+  @if (searchState.isSearchOpen()) {
+    <div class="search-overlay" (click)="toggleSearch()">
+      <div class="search-container" (click)="$event.stopPropagation()">
+        <form (ngSubmit)="onSearchSubmit()" class="search-form">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="search-icon">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            name="searchQuery"
+            placeholder="Buscar platos, bebidas..."
+            class="search-input"
+            autofocus
+          />
+          <button type="button" (click)="toggleSearch()" class="close-search" aria-label="Cerrar">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </form>
+        <p class="search-hint">Presiona Enter para buscar en el menú</p>
+      </div>
+    </div>
+  }
+</header>

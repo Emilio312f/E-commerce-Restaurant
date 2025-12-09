@@ -1,0 +1,100 @@
+<div class="product-card">
+  <!-- Image -->
+  <div class="product-image">
+    <img [src]="product.imageUrl" 
+         [alt]="product.name">
+    
+    <!-- Badges -->
+    <div class="product-badges">
+      @if (!product.isAvailable) {
+        <span class="badge featured">No disponible</span>
+      }
+      @if (product.tags && product.tags.includes('Vegetariano')) {
+        <span class="badge vegetarian">Vegetariano</span>
+      }
+      @if (product.tags && product.tags.includes('Nuevo')) {
+        <span class="badge new">Nuevo</span>
+      }
+    </div>
+
+    <!-- Wishlist button -->
+    <button type="button" (click)="toggleWishlist()" class="wishlist-btn" [class.active]="isInWishlist()" aria-label="Agregar a favoritos">
+      <svg fill="currentColor" viewBox="0 0 24 24">
+        @if (isInWishlist()) {
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        } @else {
+          <path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z" />
+        }
+      </svg>
+    </button>
+
+    <!-- Add to cart floating button -->
+    <button type="button" (click)="onAddToCart()" 
+            [disabled]="!product.isAvailable"
+            class="add-to-cart">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <div class="product-content">
+    <!-- Category & Title -->
+    <div class="product-header">
+      <div class="product-category">{{ product.category }}</div>
+      <h3>{{ product.name }}</h3>
+    </div>
+
+    <!-- Description -->
+    <p class="product-description">{{ product.description }}</p>
+
+    <!-- Rating & Prep Time -->
+    <div class="product-meta">
+      @if (product.rating) {
+        <div class="rating">
+          <div class="stars">
+            @for (star of [1,2,3,4,5]; track star) {
+              <svg viewBox="0 0 20 20" [class]="star <= product.rating ? 'filled' : 'empty'">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            }
+          </div>
+          <span class="rating-value">{{ product.rating }}</span>
+        </div>
+      }
+      
+      <div class="prep-time">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {{ product.preparationTime }} min
+      </div>
+    </div>
+
+    <!-- Allergens -->
+    @if (product.allergens && product.allergens.length > 0) {
+      <div class="allergens">
+        <div class="allergens-label">Alérgenos</div>
+        <div class="allergens-list">
+          @for (allergen of product.allergens; track allergen) {
+            <span class="allergen-tag">{{ allergen }}</span>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Footer -->
+    <div class="product-footer">
+      <div class="price">
+        <span class="currency">$</span>{{ product.price.toFixed(2) }}
+      </div>
+      
+      <button (click)="onAddToCart()" 
+              [disabled]="!product.isAvailable"
+              class="add-button">
+        Agregar
+      </button>
+    </div>
+  </div>
+</div>

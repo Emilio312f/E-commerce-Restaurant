@@ -1,0 +1,51 @@
+<section class="wishlist-page">
+  <div class="container-custom">
+    <div class="page-header">
+      <h1>Mis Favoritos</h1>
+      <p>Productos que te encantan</p>
+    </div>
+
+    @if (wishlistState.wishlist().items.length === 0) {
+      <div class="empty-wishlist">
+        <div class="empty-icon">
+          <svg fill="currentColor" viewBox="0 0 24 24">
+            <path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z" />
+          </svg>
+        </div>
+        <h2>Tu lista de favoritos está vacía</h2>
+        <p>Explora nuestro menú y guarda tus platos favoritos</p>
+        <a routerLink="/menu" class="btn-primary">Explorar Menú</a>
+      </div>
+    } @else {
+      <div class="wishlist-header">
+        <p>{{ wishlistState.itemCount() }} producto(s)</p>
+        <button type="button" (click)="clearWishlist()" class="clear-btn">Limpiar lista</button>
+      </div>
+
+      <div class="wishlist-grid">
+        @for (item of wishlistState.wishlist().items; track item.id) {
+          <div class="wishlist-item">
+            <div class="item-image">
+              <img [src]="item.productImage" [alt]="item.productName">
+            </div>
+            <div class="item-details">
+              <h3>{{ item.productName }}</h3>
+              <p class="item-price">${{ item.price.toFixed(2) }}</p>
+              <p class="added-date">Agregado el {{ item.addedAt | date:'dd/MM/yyyy' }}</p>
+            </div>
+            <div class="item-actions">
+              <button type="button" (click)="addToCart(item)" class="btn-primary">
+                Agregar al Carrito
+              </button>
+              <button type="button" (click)="removeFromWishlist(item.id)" class="btn-remove">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>
